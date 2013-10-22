@@ -1,0 +1,219 @@
+\documentclass{beamer}
+\setbeamercovered{transparent}
+
+\input{preamble}
+\usepackage{color}
+
+\begin{document}
+\title{3D  Parameterization: \\ PolyCube and CubeCover}
+\author{Tengfei Jiang}
+
+\newcommand{\FPP}[2]{\frac{\partial #1}{\partial #2}}
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\section{Outline}
+\begin{frame}{Outline}
+  \begin{enumerate}
+    \item Introduction
+    \item CubeCover and PolyCube
+    \item Conclusion
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{What we want to do?}
+  \begin{figure}
+    \begin{picture}(1,0.1)(0,0)
+      \PutPic{0.1,-0.2}{height=0.5}{cirque.png}
+      \put(0.45,0.1){\large{$f:V\to\Omega$}}
+    \end{picture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{What we need to do?}
+  Analogous to 2D parameterization, a good 3D parameterization needs a suitable frame-field.
+
+  Which can be defined as follows:
+  \begin{equation*}
+  \begin{gathered}
+    \min \int_{V}\|\nabla f - X\|^2 dV \\
+    \mbox{s.t.}\quad C = 0
+  \end{gathered}
+\end{equation*}
+Where $C=0$ is the boundary condition, and $X$ is the frame-field.
+Then the most important thing is to generate a good $X$: 
+
+\color{red}{\textit{smooth, topology well defined, controllable,...}}.
+\end{frame}
+
+\begin{frame}{Frame-Field Unknown}
+  \begin{enumerate}
+    \item Smooth : It has been done.
+    \item Topology: \textit{CubeCover} has found a few things, but it's still left unknown on how to place singularities.
+    \item Controllable: Depends on topology. Also unknown.
+  \end{enumerate}
+\end{frame}
+
+\section{CubeCover} 
+\begin{frame}{CubeCover}
+  \begin{figure}
+    \begin{picture}(1,0.1)(0,0)
+      \PutPic{0.15,-0.05}{height=0.35}{meta-mesh-2.png}
+      \put(0,-0.1){A good frame-field should statisfy the topology}
+      \put(0,-0.15){constaint: singularities should be placed well.}
+    \end{picture}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}{Frame-Field Construction}
+\begin{figure}
+  \begin{picture}(1,0.1)(0,0)
+    \PutPic{0.15,-0.05}{height=0.35}{frame-field-trilinear.png}
+    \put(0,-0.1){By using the trilinear interpolation, it will get a frame on each point.}
+    \put(0,-0.15){So that each tet has a frame at the barycenter.}
+    \put(0,-0.2){\color{blue}{\textit{It looks like a simple smoothing process.}}}
+  \end{picture}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Singularity}
+  \begin{figure}
+    \begin{picture}(1,0.1)(0,0)
+      \PutPic{0.15,-0.15}{height=0.45}{singularity-0.png}
+      \put(0.6,0.25){$x$}
+      \put(0.57,0.23){$y$}
+      \put(0.65,0.17){$x$}
+      \put(0.62,0.14){$-y$}
+      \put(0.51,0.16){$y$}
+      \put(0.53,0.14){$-y$}
+      \end{picture}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}{Frame-Field Construction}
+\begin{figure}
+  \begin{picture}(1,0.1)(0,0)
+    \PutPic{0,0.1}{height=0.2}{singularity.png}
+    \put(0.3,0.25){The major character of frame field is }
+    \put(0.3,0.2){to control the singularities.}
+    \PutPic{0,-0.15}{height=0.2}{orientation.png}
+    \put(0.3,0){\textit{matching matrix} $\prod_{st}$ defines the difference}
+    \put(0.3,-0.05){ from orientation of s to orientation of t. }
+  \end{picture}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Inner-Singularity}
+  \begin{figure}
+    \begin{picture}(1,0.1)(0,0)
+      \PutPic{0,0}{height=0.25}{singularity-matching-matrix.png}
+      \put(0.3,0.2){The singularity type of edge $e$ is defined as:}
+      \put(0.3,0.15){$type(e,t_0):= \prod_{t_kt_0}\circ\prod_{t_{k-1}t_k}\circ...\circ\prod_{t_1t_2}\circ\prod_{t_0t_1}$}
+      \put(0.3,0.1){The tets ($t_0...t_k$) is around the edge $e$.}
+      \put(0,-0.05){\textbf{Theorem:}}
+      \put(0.2,-0.05){Let $f$ be a parameterization where no tet is mapped}
+      \put(0,-0.1){to degenerated tet(a tet with vanishing volume). }
+      \put(0,-0.15){Then the \textit{type} of each edge is either the identity or a rotation of $90^{\circ}$}
+      \put(0,-0.2){around one of the coordinate axes.}
+    \end{picture}
+  \end{figure}
+\end{frame}
+
+
+
+\begin{frame}{An observation which may be usefull}
+\begin{figure}
+  \begin{picture}(1,0.1)(0,0)
+    \put(0,0.3){\textbf{Theorem:}}
+    \put(0,0.25){Let $p$ be an inner vertex of a non-degenerated hexahedral mesh }
+    \put(0,0.2){and $e_i$ its adjcaent edges. Then: \quad  $\sum_i(6-valence(e_i))=12$}
+    \put(0,0.15){Where valence of $e$ is the number of adjacent hexahedra.}
+    \PutPic{0.1,-0.2}{height=0.3}{observation-0.png}
+    \PutPic{0.5,-0.2}{height=0.25}{observation-1.png}
+  \end{picture}
+\end{figure}
+\end{frame}
+
+\begin{frame}{An observation which may be usefull}
+The above theorem indicates that:
+\begin{enumerate}
+  \item A singularity edge will not simply start or end  interior. They usually meet at \textit{node points} or hit the bounding surfaces.
+  \item Not all situations which can fulfill above equation exist in real life. \color{red}{Not complete.}
+\end{enumerate}
+\begin{figure}
+  \begin{picture}(1,0.1)(0,0)
+    \PutPic{0,-0.1}{height=0.25}{valence-6-2.png} 
+    \PutPic{0.5,-0.1}{height=0.25}{valence-6-3.png} 
+    \end{picture}
+\end{figure}
+\end{frame}
+
+\section{PolyCube}
+\begin{frame}{PolyCube}
+  \begin{figure}
+    \begin{picture}(1,0.1)(0,0)
+      \PutPic{0,-0.05}{height=0.3}{deformation.png}
+    \end{picture}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{Deformation}
+  \begin{figure}
+    \begin{picture}(1,0.1)(0,0)
+      \PutPic{-0.05,0}{height=0.2}{rotation.png}
+      \PutPic{0.5,0}{height=0.2}{position.png}
+    \end{picture}
+  \end{figure}     
+
+\TwoColumns{0.4}{
+    \begin{block}{Rotation}
+        Align the model surface normal with the global axes: $\pm X, \pm Y, \pm Z$
+      \end{block}
+  }{0.4}{
+    \begin{block}{Position}
+        Align each PolyCube face with an appropriate axis.
+    \end{block}
+  }
+\end{frame}
+
+\begin{frame}{Limitation}
+  \begin{figure}
+    \begin{picture}(1,0.1)(0,0)
+      \PutPic{0.1,0.05}{height=0.15}{non-planar.png}
+    \end{picture}
+   \end{figure}
+
+   Enforcing the planarity constraint will result in large distortion. That's because it's not a plane around the pink point.
+
+   It needs a chart cutting and inserting. But the chart insertion process is not guaranteed to produce a valid PolyCube.
+
+   \color{red}{No topology consistency guarantee}
+
+\end{frame}
+
+
+
+\section{Conclusion}
+\begin{frame}{Conclusion}
+The two method are both semi-automatic parameterization.
+\begin{itemize}
+\item PolyCube: 
+  \begin{itemize}
+    \item All-hex mesh
+    \item Singularity-free interior
+    \item No theoretical guarantee on producing a valid PolyCube
+    \end{itemize}
+
+\item CubeCover: 
+  \begin{itemize}
+    \item Singularity controllable but need to manually generate meta-mesh
+    \item Lack of frame-field smoothing
+    \item There is no sufficient condition on finding a frame-field which adheres to given singularities.
+    \end{itemize}
+\end{itemize}
+%\[\int_{birth}^{death}study(t)dt = life\]
+\end{frame}
+\end{document}
